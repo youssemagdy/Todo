@@ -1,5 +1,7 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app_1/layout/home/widget/task_widget.dart';
+import 'package:todo_app_1/model/task.dart';
 import 'package:todo_app_1/style/app_colors.dart';
 import 'package:todo_app_1/style/theme.dart';
 
@@ -41,7 +43,23 @@ class _ListTapsState extends State<ListTaps> {
             });
           },
         ),
-        
+        const SizedBox(height: 10,),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 20,),
+              itemBuilder: (context, index) => TaskWidget(
+                task: Task(
+                  title: 'Play FootBoll',
+                  description: '',
+                  date: DateTime.now().millisecondsSinceEpoch,
+                ),
+              ),
+              itemCount: 5,
+            ),
+          ),
+        )
       ],
     );
   }
