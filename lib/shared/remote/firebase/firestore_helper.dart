@@ -18,7 +18,7 @@ class FirestoreHelper{
     return reference;
   }
 
-  static Future<void> AddUser(String email , String fullName, String userID) async {
+  static Future<void> addUser(String email , String fullName, String userID) async {
     var documnent = getUserCollection().doc(userID);
     await documnent.set(
       User(
@@ -56,5 +56,17 @@ class FirestoreHelper{
     var taskQuery = await getTaskCollection(uid).get();
     List<Task> tasksList = taskQuery.docs.map((snapshot) => snapshot.data()).toList();
     return tasksList;
+  }
+
+  static Future<void> deleteTask({required String uid, required String taskId}) async {
+    await getTaskCollection(uid).doc(taskId).delete();
+  }
+
+  static Stream<List<Task>> listenToTasks(String uid, int date) async*{
+    Stream<QuerySnapshot<Task>> taskQueryStream = getTaskCollection(uid).where('date', isEqualTo: date).snapshots();
+    Stream<List<Task>> tasksSteam = taskQueryStream.map(
+      (querySnapShot) => querySnapShot.docs.map((doucument) => doucument.data()).toList()
+    );
+    yield* tasksSteam;
   }
 }

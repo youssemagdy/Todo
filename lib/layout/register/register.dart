@@ -164,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: emailController.text,
             password: passwordController.text,
         );
-        FirestoreHelper.AddUser(
+        FirestoreHelper.addUser(
             emailController.text,
             fullNameController.text,
             credential.user!.uid

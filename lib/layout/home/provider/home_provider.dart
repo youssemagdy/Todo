@@ -12,6 +12,7 @@ class HomeProvider extends ChangeNotifier{
 
   void selectNewDate(DateTime? newSelected){
     selectedDate = newSelected;
+    print(selectedDate.toString());
     notifyListeners();
   }
 }
