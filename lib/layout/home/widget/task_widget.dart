@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app_1/layout/home/edit_screen.dart';
 import 'package:todo_app_1/model/task.dart';
 import 'package:todo_app_1/shared/provider/auth_provider.dart';
 import 'package:todo_app_1/shared/remote/firebase/firestore_helper.dart';
@@ -19,22 +20,27 @@ class TaskWidget extends StatelessWidget {
     return Slidable(
       startActionPane: ActionPane(
         motion: const ScrollMotion(),
-        extentRatio: 0.3,
+        extentRatio: 0.6,
         children: [
           SlidableAction(
             onPressed: (context){
-              FirestoreHelper.deleteTask(
-                  uid: provider.firebaseUserAuth!.uid,
-                  taskId: task.id ?? ''
-              );
+              FirestoreHelper.deleteTask(uid: provider.firebaseUserAuth!.uid, taskId: task.id ?? '');
             },
             icon: Icons.delete,
             label: 'Delete',
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red.shade900,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
               bottomLeft: Radius.circular(15),
             )
+          ),
+          SlidableAction(
+              onPressed: (context){
+                Navigator.pushNamed(context, EditScreen.routName, arguments: task);
+              },
+              icon: Icons.edit,
+              label: 'Edit',
+              backgroundColor: Colors.green.shade900,
           ),
         ],
       ),
@@ -50,7 +56,7 @@ class TaskWidget extends StatelessWidget {
               height: height * 0.1,
               width: 4,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: task.isDone == true ? Colors.green : Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -61,7 +67,9 @@ class TaskWidget extends StatelessWidget {
                   children: [
                     Text(
                       task.title ?? '',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: task.isDone == true ? Colors.green : Theme.of(context).primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 5,),
                     Row(
@@ -79,12 +87,16 @@ class TaskWidget extends StatelessWidget {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: task.isDone == true ? Colors.green : Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
                 )
               ),
-              onPressed: (){},
-              child: const Icon(Icons.check)
+              onPressed: (){
+                task.isDone =! (task.isDone ?? false);
+                FirestoreHelper.editTask(task, provider.firebaseUserAuth!.uid);
+              },
+              child: task.isDone == true ? const Text('Done') : const Icon(Icons.check)
             ),
           ],
         ),

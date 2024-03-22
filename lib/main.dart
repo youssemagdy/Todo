@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app_1/layout/home/edit_screen.dart';
 import 'package:todo_app_1/layout/home/home_screen.dart';
 import 'package:todo_app_1/layout/home/provider/home_provider.dart';
 import 'package:todo_app_1/layout/register/register.dart';
@@ -33,13 +34,14 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title: 'TODO App',
       routes: {
-        LoginScreen.routeName:(_) => LoginScreen(),
-        RegisterScreen.routeName:(_) => RegisterScreen(),
-        HomeScreen.routName:(_) => ChangeNotifierProvider(
+        LoginScreen.routeName: (_) => LoginScreen(),
+        RegisterScreen.routeName: (_) => RegisterScreen(),
+        EditScreen.routName: (_) => EditScreen(),
+        HomeScreen.routName: (_) => ChangeNotifierProvider(
           create: (_) => HomeProvider(),
           child: HomeScreen()
         ),
-        SplashScreen.routeName:(_) => const SplashScreen(),
+        SplashScreen.routeName: (_) => const SplashScreen(),
       },
       initialRoute: SplashScreen.routeName,
     );

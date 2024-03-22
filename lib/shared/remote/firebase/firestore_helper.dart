@@ -52,6 +52,12 @@ class FirestoreHelper{
     await tasksDocument.set(task);
   }
 
+  static Future<void> editTask(Task task, String userID) async {
+    var reference = getTaskCollection(userID);
+    var tasksDocument = reference.doc(task.id);
+    await tasksDocument.update(task.toFirestore());
+  }
+
   static Future<List<Task>> getAllTasks(String uid)async{
     var taskQuery = await getTaskCollection(uid).get();
     List<Task> tasksList = taskQuery.docs.map((snapshot) => snapshot.data()).toList();
